@@ -61,20 +61,34 @@ Blue Side
 
 export function myCreateNodes(data) {
 
-  const maxAmount = d3.max(data, d => +(d.wins + d.losses))
-
+  //const maxAmount = d3.max(data, d => +(d.wins + d.losses))
+  const maxAmount = d3.max(data, d => +(d.picks))
   const radiusScale = d3.scalePow()
     .exponent(0.5)
     .range([0, 85])
     .domain([0, maxAmount])
 
-  const myNodes = data.map(d => ({
+  /*const myNodes = data.map(d => ({
     id: d.id,
     radius: radiusScale(+(d.wins + d.losses)),
     value: +(d.wins + d.losses),
     name: d.champion,
     wins: d.wins,
     losses: d.losses,
+    redSide: d.redSide,
+    blueSide: d.blueSide,
+    group: selectGroup(d),
+    x: Math.random() *900,
+    y: Math.random() * 800,
+  }))*/
+
+  const myNodes = data.map(d => ({
+    //id: d.id,
+    radius: radiusScale(+(d.picks)),
+    value: +(d.picks),
+    name: d.champion,
+    wins: d.wins,
+    losses: d.picks - d.wins,
     redSide: d.redSide,
     blueSide: d.blueSide,
     group: selectGroup(d),

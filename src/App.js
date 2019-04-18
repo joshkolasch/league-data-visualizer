@@ -12,12 +12,12 @@ import GroupingPicker from './components/GroupingPicker'
 import { createNodes, myCreateNodes, fetchFakeData } from './utils'
 import { width, height, center, yearCenters, leftCenter, rightCenter } from './constants'
 import Chart from './components/Chart'
-//import csv from 'csvtojson'
 
 //DONE: change grouping to queryFilter and 'all'
 //TODO: remove grouping from state
 export default class App extends React.Component {
   state = {
+    data: [],
     chartOneData: [],
     chartTwoData: [],
     filter: 'none',
@@ -33,20 +33,91 @@ export default class App extends React.Component {
     },
   }
 
+
   //TODO: replace 'data/fakeData.json' with json data from an async API call function
   //Note: on componentDidMount(), the data defaults to All Leagues for the entirety of Spring 2019
   componentDidMount() {
 
-  /*const filePath = './league-test-data.csv'
-  csv().fromFile(filePath)
-    .then((jsonObj) => {
-      console.log(jsonObj)
-    })*/
+    //let file = 'data/league_test_data_long_form.csv'
+
+    let file = 'data/league_data_spring_19.csv'
+    d3.csv(file, (err, data) => {
+      //console.log('data', data)
+
+      /************************************************************ */
+      //TODO: filter all of the results before the picks are tallied
+      //create a function for this outside of componentDidMount()
+      //call it inside of onFilterOneChanged() and onFilterTwoChanged()
+      /************************************************************ */
+      let results = data.filter(item => item.playerid <=10)
+        .map(item => ({
+          champion: item.champion,
+          league: item.league,
+          patchno: Number(item.patchno),
+          side: item.side,
+          result: Number(item.result),
+          position: item.position
+        }))
+
+      let talliedResults = {}
+
+      results.forEach(item => {
+        if(talliedResults.hasOwnProperty(item.champion)) {
+          talliedResults[item.champion].picks += 1
+          talliedResults[item.champion].wins += item.result
+          if(item.side === 'Blue') {
+            talliedResults[item.champion].blueSide += 1
+          }
+          else {
+            talliedResults[item.champion].redSide += 1
+          }
+        }
+        else {
+          let red = Number(1 && item.side === 'Red')
+          let blue = Number(1 && item.side === 'Blue')
+
+          talliedResults = {
+            ...talliedResults,
+            [item.champion]: {
+              champion: item.champion,
+              picks: 1,
+              wins: item.result,
+              redSide: red,
+              blueSide: blue,
+            }
+          }
+        }
+      })
+
+      console.log(talliedResults)
+
+      let sum = 0;
+
+      Object.keys(talliedResults).forEach(key => {
+        sum += talliedResults[key].picks
+      })
+
+      console.log(sum)
+
+      let finalResults = []
+
+      Object.keys(talliedResults).forEach(key => {
+        finalResults.push(talliedResults[key])
+      })
+
+      this.setState({
+        chartOneData: myCreateNodes(finalResults.filter(item => item.picks > 200)),
+        chartTwoData: myCreateNodes(finalResults.filter(item => item.picks > 200))
+      })
+  
+    })
+
+    
+    
 
 
-    //console.log(results)
 
-    d3.json('data/fakeData.json', (err, data) => {
+    /*d3.json('data/fakeData.json', (err, data) => {
       if (err) {
         console.log(err)
         return
@@ -55,7 +126,7 @@ export default class App extends React.Component {
         chartOneData: myCreateNodes(data),
         chartTwoData: myCreateNodes(data.filter(i => i.id %2 === 0))
       })
-    })
+    })*/
   }
 
   //DONE: change this to onQueryFilterChanged
@@ -75,6 +146,7 @@ export default class App extends React.Component {
     }, () => (console.log('new new state', this.state)))
     //TODO: replace anonymous function above with an api call to change the query parameters
   }
+
 
   onChartTwoFilterChanged = (newFilter) => {
     console.log('filter Two changed', newFilter)
