@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "champion": "Ashe",
+    "wins": 20,
+    "losses": 11,
+    "redSide": 15,
+    "blueSide": 16
+  },
+  {
+    "id": 2,
+    "champion": "Anivia",
+    "wins": 0,
+    "losses": 0,
+    "redSide": 0,
+    "blueSide": 0
+  },
+  {
+    "id": 3,
+    "champion": "Darius",
+    "wins": 2,
+    "losses": 5,
+    "redSide": 5,
+    "blueSide": 2
+  },
+  {
+    "id": 4,
+    "champion": "Hecarim",
+    "wins": 20,
+    "losses": 20,
+    "redSide": 10,
+    "blueSide": 30
+  },
+  {
+    "id": 5,
+    "champion": "Heimerdinger",
+    "wins": 5,
+    "losses": 10,
+    "redSide": 15,
+    "blueSide": 16
+  },
+  {
+    "id": 6,
+    "champion": "Jarvin IV",
+    "wins": 12,
+    "losses": 35,
+    "redSide": 30,
+    "blueSide": 17
+  },
+  {
+    "id": 7,
+    "champion": "Jax",
+    "wins": 20,
+    "losses": 20,
+    "redSide": 11,
+    "blueSide": 29
+  },
+  {
+    "id": 8,
+    "champion": "Janna",
+    "wins": 2,
+    "losses": 11,
+    "redSide": 6,
+    "blueSide": 7
+  },
+  {
+    "id": 9,
+    "champion": "Kai'sa",
+    "wins": 20,
+    "losses": 11,
+    "redSide": 15,
+    "blueSide": 16
+  },
+  {
+    "id": 10,
+    "champion": "LeBlanc",
+    "wins": 20,
+    "losses": 11,
+    "redSide": 15,
+    "blueSide": 16
+  },
+  {
+    "id": 11,
+    "champion": "Lissandra",
+    "wins": 20,
+    "losses": 11,
+    "redSide": 15,
+    "blueSide": 16
+  },
+  {
+    "id": 12,
+    "champion": "Rek'Sai",
+    "wins": 20,
+    "losses": 11,
+    "redSide": 15,
+    "blueSide": 16
+  },
+  {
+    "id": 13,
+    "champion": "Ryze",
+    "wins": 40,
+    "losses": 35,
+    "redSide": 55,
+    "blueSide": 20
+  },
+  {
+    "id": 14,
+    "champion": "Tristana",
+    "wins": 20,
+    "losses": 15,
+    "redSide": 11,
+    "blueSide": 16
+  },
+  {
+    "id": 15,
+    "champion": "Urgot",
+    "wins": 60,
+    "losses": 30,
+    "redSide": 45,
+    "blueSide": 45
+  }
+]
