@@ -239,7 +239,7 @@ export function fetchData(filepath) {
 */
 
 export function selectGroup(datapoint) {
-  let picks = datapoint.wins + datapoint.losses
+  let picks = datapoint.picks
 
   if(picks <= 0) {
     return 'low'
@@ -247,7 +247,7 @@ export function selectGroup(datapoint) {
 
   let winPercentage = datapoint.wins / picks
 
-  if(winPercentage >= .6) {
+  if(winPercentage >= .55) {
     return 'high'
   }
 
@@ -255,7 +255,12 @@ export function selectGroup(datapoint) {
     return 'medium'
   }
 
-  return 'low'
+  else if(winPercentage >= .45)
+  {
+    return 'low'
+  }
+
+  return 'very-low'
 }
 
-export const fillColor = d3.scaleOrdinal().domain(['low', 'medium', 'high']).range(['#d84b2a', '#beccae', '#7CFC00'])
+export const fillColor = d3.scaleOrdinal().domain(['very-low', 'low', 'medium', 'high']).range(['#FF0000', '#d84b2a', '#beccae', '#7CFC00'])

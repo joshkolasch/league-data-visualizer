@@ -22,13 +22,13 @@ export default class App extends React.Component {
     chartTwoData: [],
     filter: 'none',
     chartOneFilters: {
-      region: 'none',
-      patch: 'none',
+      league: 'none',
+      patchno: 'none',
       position: 'none'
     },
     chartTwoFilters: {
-      region: 'none',
-      patch: 'none',
+      league: 'none',
+      patchno: 'none',
       position: 'none'
     },
   }
@@ -49,16 +49,23 @@ export default class App extends React.Component {
       //create a function for this outside of componentDidMount()
       //call it inside of onFilterOneChanged() and onFilterTwoChanged()
       /************************************************************ */
+
+
       let results = data.filter(item => item.playerid <=10)
         .map(item => ({
           champion: item.champion,
           league: item.league,
-          patchno: Number(item.patchno),
+          patchno: item.patchno,
           side: item.side,
           result: Number(item.result),
           position: item.position
         }))
 
+      this.setState({
+        data: results
+      }, () => console.log('my new data is', this.state.data))
+
+      /*
       let talliedResults = {}
 
       results.forEach(item => {
@@ -89,7 +96,9 @@ export default class App extends React.Component {
         }
       })
 
-      console.log(talliedResults)
+      console.log('results #2', results)
+
+      console.log('talliedResults', talliedResults)
 
       let sum = 0;
 
@@ -105,17 +114,16 @@ export default class App extends React.Component {
         finalResults.push(talliedResults[key])
       })
 
+      */
+
+      let aggregate = this.aggregateData(results)
+
       this.setState({
-        chartOneData: myCreateNodes(finalResults.filter(item => item.picks > 200)),
-        chartTwoData: myCreateNodes(finalResults.filter(item => item.picks > 200))
+        chartOneData: myCreateNodes(aggregate.filter(item => item.picks > 200)),
+        chartTwoData: myCreateNodes(aggregate.filter(item => item.picks > 200))
       })
   
     })
-
-    
-    
-
-
 
     /*d3.json('data/fakeData.json', (err, data) => {
       if (err) {
@@ -143,25 +151,106 @@ export default class App extends React.Component {
         ...(this.state.chartOneFilters),
         [key]: value
       }
-    }, () => (console.log('new new state', this.state)))
+    }, () => this.filterResults(this.state.data, this.state.chartOneFilters, 'chartOneData'))
     //TODO: replace anonymous function above with an api call to change the query parameters
   }
-
 
   onChartTwoFilterChanged = (newFilter) => {
     console.log('filter Two changed', newFilter)
     let key = Object.keys(newFilter)[0]
     let value = newFilter[key]
 
-    console.log('key', key)
-    console.log('value', value)
-
     this.setState({
       chartTwoFilters: {
         ...(this.state.chartTwoFilters),
         [key]: value
       }
-    }, () => (console.log('new new state', this.state)))
+    }, () => this.filterResults(this.state.data, this.state.chartTwoFilters, 'chartTwoData'))
+  }
+
+  filterResults = (data, filters, stateComponent) => {
+    
+    let filteredResults = this.applyFilters(data, filters)
+    console.log('data', data)
+    console.log('filters', filters)
+
+    console.log('filteredResults', filteredResults)
+
+    let aggregate = this.aggregateData(filteredResults)
+
+    this.setState({
+      [stateComponent]: myCreateNodes(aggregate)
+    })
+  }
+
+  applyFilters = (data, filters) => {
+    let dataToFilter = data
+
+    let filterResults = []
+
+    Object.keys(filters).forEach(key => {
+      console.log('key', key)
+      if(filters[key] !== 'none') {
+        console.log('in here get it', )
+        dataToFilter = dataToFilter.filter(item => item[key] === filters[key])
+      }
+    })
+
+    console.log('dataToFilter', dataToFilter)
+
+    return dataToFilter
+  }
+
+  aggregateData = (data) => {
+    let talliedResults = {}
+
+      data.forEach(item => {
+        if(talliedResults.hasOwnProperty(item.champion)) {
+          talliedResults[item.champion].picks += 1
+          talliedResults[item.champion].wins += item.result
+          if(item.side === 'Blue') {
+            talliedResults[item.champion].blueSide += 1
+          }
+          else {
+            talliedResults[item.champion].redSide += 1
+          }
+        }
+        else {
+          let red = Number(1 && item.side === 'Red')
+          let blue = Number(1 && item.side === 'Blue')
+
+          talliedResults = {
+            ...talliedResults,
+            [item.champion]: {
+              champion: item.champion,
+              picks: 1,
+              wins: item.result,
+              redSide: red,
+              blueSide: blue,
+            }
+          }
+        }
+      })
+
+      console.log('results #2', data)
+
+      console.log('talliedResults', talliedResults)
+
+      let sum = 0;
+
+      Object.keys(talliedResults).forEach(key => {
+        sum += talliedResults[key].picks
+      })
+
+      console.log(sum)
+
+      let finalResults = []
+
+      Object.keys(talliedResults).forEach(key => {
+        finalResults.push(talliedResults[key])
+      })
+
+      return finalResults
   }
 
   //TODO: do I still need the 'filter' variable and the 'active' variable???

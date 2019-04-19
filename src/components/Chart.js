@@ -5,6 +5,7 @@ import MyBubbles from './MyBubbles'
 import { center } from '../constants'
 
 export default function Chart({ classes, width, height, onChanged, active, data, filter, filtered}) {
+  console.log('data in chartjs', data)
   return (
     <div className={classes} width={width} height={height} >
       <QueryFilter onChanged={onChanged} active={active}/>

@@ -19,11 +19,11 @@ export default class QueryFilter extends React.Component {
     this.setState({
       regionValue: event.target.value
     }, () => console.log('onRegionChanged', this.state.regionValue))
-    this.props.onChanged({region: event.target.value})
+    this.props.onChanged({league: event.target.value})
   }
 
   onPatchChanged = (event) => {
-    this.props.onChanged({patch: event.target.value})
+    this.props.onChanged({patchno: event.target.value})
     this.setState({
       patchValue: event.target.value
     }, () => console.log('onPatchChanged', this.state.patchValue))
